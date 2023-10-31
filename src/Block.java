@@ -3,7 +3,7 @@ import java.awt.*;
 
 public class Block extends JPanel {
 
-    private BlockState blockState;
+    private BlockState blockState=BlockState.Empty;
     private int x;
     private int y;
     private boolean highlighted;

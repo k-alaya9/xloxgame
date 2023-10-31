@@ -79,13 +79,15 @@ public class State {
         return this.numberOfWhiteBlocks;
     }
 
-    public State getNextState() {
+    public State getNextState(Graph graph) {
         Block[][] blocks = deepCopyArrayOfBlocks(arrayOfBlocks);
         State nextState = new State(blocks);
         List<Block> moves = nextState.checkAllMoves();
         for (Block move : moves) {
             nextState.move(move.getX(), move.getY());
         }
+        graph.addNode(nextState);
+        graph.addEdges(this,nextState);
         return nextState;
     }
 
