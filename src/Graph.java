@@ -24,14 +24,19 @@ public class Graph {
         return vertices.get(node);
     }
     public void addNode(State node){
-        vertices.put(node,new ArrayList<>());
-    }
-
-    public void addEdges(State sourceNode,State distNode){
-        if(!GetNode(sourceNode).contains(new Edge(distNode))) {
-            GetNode(sourceNode).add(new Edge(distNode));
+        if(!vertices.containsKey(node)) {
+            vertices.put(node,new ArrayList<>());
         }
     }
 
+    public int getGraphSize(){
+        return vertices.size();
+    }
+    public void addEdges(State sourceNode,State distNode){
+        if(!vertices.containsKey(sourceNode)||!vertices.containsKey(distNode)) {
+            return;
+        }
+       vertices.get(sourceNode).add(new Edge(distNode));
+    }
 
 }
