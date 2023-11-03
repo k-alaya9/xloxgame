@@ -5,38 +5,35 @@ import java.util.Map;
 
 public class Graph {
 
-    private Map<State,List<Edge>> vertices;
+    private Map<State,List<State>> graph;
 
     public Graph() {
-        this.vertices=new HashMap<>();
+        this.graph=new HashMap<>();
     }
 
 
-    public Map<State, List<Edge>> getVertices() {
-        return vertices;
+    public Map<State, List<State>> getgraph() {
+        return graph;
     }
 
-    public void setVertices(Map<State, List<Edge>> vertices) {
-        this.vertices = vertices;
+    public void setgraph(Map<State, List<State>> graph) {
+        this.graph = graph;
     }
 
-    public List<Edge>GetNode(State node){
-        return vertices.get(node);
+    public List<State>GetNode(State node){
+        return graph.get(node);
     }
     public void addNode(State node){
-        if(!vertices.containsKey(node)) {
-            vertices.put(node,new ArrayList<>());
-        }
+        graph.put(node,new ArrayList<>());
     }
 
     public int getGraphSize(){
-        return vertices.size();
+        return graph.size();
     }
     public void addEdges(State sourceNode,State distNode){
-        if(!vertices.containsKey(sourceNode)||!vertices.containsKey(distNode)) {
+        if(!graph.containsKey(sourceNode)||!graph.containsKey(distNode))
             return;
-        }
-       vertices.get(sourceNode).add(new Edge(distNode));
+        graph.get(sourceNode).add(distNode);
     }
 
 }
