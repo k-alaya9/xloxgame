@@ -52,18 +52,21 @@ public class Block{
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Block block = (Block) o;
-        return x == block.x && y == block.y && blockState == block.blockState;
-    }
-
-    @Override
     public int hashCode() {
         return Objects.hash(blockState, x, y);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Block other = (Block) obj;
+        return blockState == other.blockState && x == other.x && y == other.y;
+    }
     @Override
     public String toString() {
         return "Block{" +

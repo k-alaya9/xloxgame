@@ -2,15 +2,19 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class State {
     private Block[][] arrayOfBlocks;
 
+    private int coast;
+
     public State() {
     }
 
-    public State(Block[][] arrayOfBlocks) {
+    public State(Block[][] arrayOfBlocks, int coast) {
         this.arrayOfBlocks = arrayOfBlocks;
+        this.coast = coast;
     }
 
     public Block[][] getArrayOfBlocks() {
@@ -33,9 +37,9 @@ public class State {
                     System.out.print("[ ]");
                 }
             }
-
             System.out.println();
         }
+        System.out.println("======================");
     }
 
     public void move(int x, int y) {
@@ -48,6 +52,8 @@ public class State {
         arrayOfBlocks[x-1][y].changeStateOfBlock();
         arrayOfBlocks[x][y+1].changeStateOfBlock();
         arrayOfBlocks[x][y-1].changeStateOfBlock();
+
+//        printState();
     }
 
     public  boolean isFinal() {
@@ -65,7 +71,7 @@ public class State {
         List<Block> moves =checkAllMoves();
         for (Block move : moves) {
             Block[][] blocks =  deepCopy(arrayOfBlocks);
-            State nextState = new State(blocks);
+            State nextState = new State(blocks,coast+1);
             nextState.move(move.getX(), move.getY());
                 graph.addNode(nextState);
                 graph.addEdges(this,nextState);
@@ -74,16 +80,21 @@ public class State {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        State state = (State) o;
-        return Arrays.deepEquals(arrayOfBlocks, state.arrayOfBlocks);
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        State other = (State) obj;
+        return  Arrays.deepEquals(arrayOfBlocks, other.arrayOfBlocks);
     }
+
 
     @Override
     public int hashCode() {
-        return Arrays.deepHashCode(arrayOfBlocks);
+        return  Arrays.deepHashCode(arrayOfBlocks);
     }
 
     Block[][] deepCopy(Block[][] array) {
@@ -107,4 +118,12 @@ public class State {
         }
         return moves;
     }
+    public int getCoast() {
+        return coast;
+    }
+
+    public void setCoast(int coast) {
+        this.coast = coast;
+    }
+
 }

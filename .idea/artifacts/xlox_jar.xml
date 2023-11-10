@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="xlox:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/xlox_jar</output-path>
+    <root id="archive" name="xlox.jar">
+      <element id="module-output" name="xlox" />
+    </root>
+  </artifact>
+</component>
