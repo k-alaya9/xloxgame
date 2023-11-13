@@ -77,22 +77,52 @@ public class Logic {
         pq.add(state);
         while (!pq.isEmpty()){
             State node=pq.poll();
-            visited.add(node);
-
             if (node.isFinal()){
                 System.out.println("Graph Size:" + graph.getGraphSize());
                 System.out.println("Number of visited node:" + visited.size());
                 printPath(path, node);
-                break;
+                return;
             }
-            node.getNextState(graph);
+            if(!visited.contains(node)){
+                visited.add(node);
+                node.getNextState(graph);
+            }
             for (State e:graph.GetNode(node)) {
                 int newCoast= node.getCoast()+1;
-                if(!visited.contains(e) || (!pq.contains(e) &&newCoast<e.getCoast())){
+                if(!visited.contains(e)){
                         pq.remove(e);
                         e.setCoast(newCoast);
                         pq.add(e);
                         path.put(e, node);
+                }
+            }
+        }
+    }
+
+
+    public void hillClimbing(State state){
+        Graph graph= new Graph();
+        PriorityQueue<State>queue= new PriorityQueue<>(Comparator.comparingInt(State::getCoast));
+        Set<State> visited= new HashSet<>();
+        Map<State,State>path= new HashMap<>();
+        graph.addNode(state);
+        queue.add(state);
+        while(!queue.isEmpty()){
+            State node=queue.poll();
+            if(node.isFinal()){
+                System.out.println("Graph Size:" + graph.getGraphSize());
+                System.out.println("Number of visited node:" + visited.size());
+               printPath(path, node);
+                break;
+            }
+            if(!visited.contains(node)){
+                visited.add(node);
+                node.getNextState(graph);
+            }
+            for (State dist: graph.GetNode(node)){
+                if(!visited.contains(dist)){
+                    queue.add(dist);
+                    path.put(dist,node);
                 }
             }
         }

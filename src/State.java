@@ -12,9 +12,8 @@ public class State {
     public State() {
     }
 
-    public State(Block[][] arrayOfBlocks, int coast) {
+    public State(Block[][] arrayOfBlocks) {
         this.arrayOfBlocks = arrayOfBlocks;
-        this.coast = coast;
     }
 
     public Block[][] getArrayOfBlocks() {
@@ -71,7 +70,7 @@ public class State {
         List<Block> moves =checkAllMoves();
         for (Block move : moves) {
             Block[][] blocks =  deepCopy(arrayOfBlocks);
-            State nextState = new State(blocks,coast+1);
+            State nextState = new State(blocks);
             nextState.move(move.getX(), move.getY());
                 graph.addNode(nextState);
                 graph.addEdges(this,nextState);
@@ -119,11 +118,43 @@ public class State {
         return moves;
     }
     public int getCoast() {
-        return coast;
+        return calculateHeuristic();
     }
 
     public void setCoast(int coast) {
         this.coast = coast;
     }
 
+    private int calculateTotalDistance(State state) {
+        int totalDistance = 0;
+        Block[][] arrayOfBlocks = state.getArrayOfBlocks();
+        List<Point> twos = new ArrayList<>();
+
+        for (int i = 0; i < arrayOfBlocks.length; i++) {
+            for (int j = 0; j < arrayOfBlocks[i].length; j++) {
+                if (arrayOfBlocks[i][j].getBlockState() == BlockState.White) {
+                    twos.add(new Point(i, j));
+                }
+            }
+        }
+
+        for (int i = 0; i < twos.size(); i++) {
+            for (int j = i + 1; j < twos.size(); j++) {
+                Point firstTwo = twos.get(i);
+                Point secondTwo = twos.get(j);
+                int distance = Math.abs(firstTwo.x - secondTwo.x) + Math.abs(firstTwo.y - secondTwo.y);
+                totalDistance += distance;
+            }
+        }
+
+        return totalDistance;
+    }
+    public int calculateHeuristic() {
+        int NumberOfWhite = this.checkAllMoves().size();
+        int totalDistance = calculateTotalDistance(this);
+
+        int heuristicValue = NumberOfWhite + totalDistance;
+
+        return heuristicValue;
+    }
 }
