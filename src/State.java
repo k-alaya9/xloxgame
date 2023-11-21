@@ -7,13 +7,18 @@ import java.util.Objects;
 public class State {
     private Block[][] arrayOfBlocks;
 
-    private int coast;
+    private int coast=0;
 
     public State() {
     }
 
     public State(Block[][] arrayOfBlocks) {
         this.arrayOfBlocks = arrayOfBlocks;
+    }
+
+    public State(Block[][] arrayOfBlocks, int coast) {
+        this.arrayOfBlocks = arrayOfBlocks;
+        this.coast = coast;
     }
 
     public Block[][] getArrayOfBlocks() {
@@ -70,7 +75,7 @@ public class State {
         List<Block> moves =checkAllMoves();
         for (Block move : moves) {
             Block[][] blocks =  deepCopy(arrayOfBlocks);
-            State nextState = new State(blocks);
+            State nextState = new State(blocks,coast+1);
             nextState.move(move.getX(), move.getY());
                 graph.addNode(nextState);
                 graph.addEdges(this,nextState);
@@ -118,7 +123,7 @@ public class State {
         return moves;
     }
     public int getCoast() {
-        return calculateHeuristic();
+        return coast;
     }
 
     public void setCoast(int coast) {
@@ -152,9 +157,11 @@ public class State {
     public int calculateHeuristic() {
         int NumberOfWhite = this.checkAllMoves().size();
         int totalDistance = calculateTotalDistance(this);
-
         int heuristicValue = NumberOfWhite + totalDistance;
 
         return heuristicValue;
+    }
+    public int totalCost(){
+        return coast+calculateHeuristic();
     }
 }
